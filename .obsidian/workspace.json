@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2025-12-23-test1.md.md",
+                "file": "_posts/2025-12-23-test1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-12-23-test1.md"
+              "title": "2025-12-23-test1"
             }
           }
         ]
@@ -183,7 +183,7 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "aabb9cce94f1684d",
+  "active": "aa1045f5bb3da837",
   "lastOpenFiles": [
     "_posts/2025-12-23-test1.md.md"
   ]
