@@ -1,7 +1,7 @@
 --- 
 layout: post
 title: "나노광학 입자 역설계(Inverse Design) AI 웹 서비스 구축기"
-date: 2026-02-23 15:00:00 +0900 
+date: 2026-02-23 00:00:00 +0900 
 categories: [Project, AI]
 tags: [Deep Learning, PyTorch, Inverse Design, Nanophotonics, Streamlit]
 ---
