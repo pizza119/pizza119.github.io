@@ -3,6 +3,7 @@ layout: post
 title: "나노광학 입자 역설계(Inverse Design) AI 웹 서비스 구축기"
 date: 2026-02-23 00:00:00 +0900 
 categories: [Project, AI]
+math: true
 tags: [Deep Learning, PyTorch, Inverse Design, Nanophotonics, Streamlit]
 ---
 
@@ -75,6 +76,7 @@ $$\sigma_{sca} = \frac{2\pi}{k^2} \sum_{l=1}^{\infty} (2l+1) (|a_l|^2 + |b_l|^2)
 
 # 3. 전체 프로젝트 개요 (Project Pipeline)
 본 프로젝트는 단순히 AI 모델 하나를 만드는 것에 그치지 않고, **물리 시뮬레이션 데이터 생성부터 역설계까지의 전 과정** 을 수행했습니다. 전체 워크플로우는 아래와 같이 3단계로 구성됩니다.
+
 +추가로 여러 역설계 모델을 웹사이트에 올려놔서 모두가 볼 수 있게 만들었습니다.
 ![전체 파이프라인](/assets/img/inverse_design_images/pipeline.png)
 ##  Step 1. 데이터 생성 (Data Generation)
@@ -123,27 +125,23 @@ AI에게 정답을 가르치는 단계입니다.
 AI 모델을 학습시키기 위해 입력(구조)과 정답(스펙트럼)이 짝지어진 양질의 데이터셋이 필수적입니다. 
 논문에서 학습 데이터로 5만개의 데이터를 사용했기에 저도 **50,000개**의 데이터 샘플 갯수를 목표로 잡았습니다.
 ## 4-1. COMSOL Multiphysics 시도와 한계
+실제로 구형 모양에 대응하는 스팩트럼 데이터를 얻기 위해 Comsol Multiphysics를 사용했습니다.
+맨 처음에는 구조를 만들고, 기본상태 지정하고, 스터디를 진행했습니다.
+자바 메소드를 이용해서 데이터 대량생산을 진행할 때, 자바 힙 메모리 초과로 인해 문제가 생긴 적도 있었습니다.
+당시에는 당황해서 별 짓을 다했지만, 결론적으로는 exe파일까지 내려가서 자바 힙 메모리 할당을 128GB까지 늘려버렸습니다.
+결론적으로 데이터 확보는 가능하지만 1개 만드는데 30분 정도의 연산시간이 걸리기 시작했습니다.
 
+![초기 comsol 실행|554](/assets/img/inverse_design_images/comsol_play_first.png)
 
+위 사진은 실제로 구현 화면입니다.
+학습용 데이터만 5만개 필요한데 1개에 30분이면 몇년이 걸리는 상황이었습니다.
+그래서 시간단축을 위해 구를 1/4로 자른 후 mesh 갯수를 1.5만개 -> 4천개 로 줄여서 시간을 단축했습니다.
 
+![1_4round](/assets/img/inverse_design_images/1_4round.png)
 
-
-
-
-나중에 계산용 컴퓨터 사용 가능 시 작성(사진 첨부 등 사용)
-우선 구글이랑 LLM 물어보면서 만들었다
--> 자꾸 메모리 초과라고 에러떠서 확인하니 자바 힙 메모리 에러
--> 강제로 128GB로 증가
--> 해결해도 데이터 하나에 2시간
-따라서 시간 줄이기 위해 1/4로 줄임(전자기장 완전반사면), mesh도 대략 1.5만개 -> 4천개 로 줄임
--> 데이터 하나에 3분(그래도 시간이 부족함)
-완전한 구대칭이기에 2차원으로 줄일 수있겠지만 다른 살길 마련
-
-
-
-
-
-
+실제로 위 방법을 적용한 결과 데이터 1개에 대략 3분정도로 매우 괜찮은 성능이 나왔습니다.
+하지만 학습용데이터 5만개를 만들기 위해서는 아직도 대략 0.6년의 시간이 걸리기에 이 또한 정답이 될 수 없었습니다.
+따라서 이번 프로젝트에 맞는 대안을 찾아내야 했습니다.
 
 ## 4-2. Python Scattnlay 라이브러리 도입
 
@@ -168,7 +166,7 @@ import pandas as pd
 from scattnlay import scattnlay
 from tqdm import tqdm
 
-# 1. 물질 굴절률 정의 함수
+# 물질 굴절률 정의 함수
 # TiO2는 파장에 따라 굴절률이 변하므로(Dispersion), 실험 데이터를 근사한 식을 사용했습니다.
 def get_n_TiO2(wavelength_nm):
     wl_um = wavelength_nm / 1000.0
@@ -208,7 +206,6 @@ def generate_dataset(num_samples=5000, filename="training_data.csv"):
     for i in tqdm(range(num_samples)):
         thicknesses = np.random.uniform(30, 70, 8) # 두께 조합을 전부 랜덤으로 설정
         spectrum = run_simulation_once(thicknesses)
-        # [두께 8개] + [스펙트럼 201개] 형태로 저장
         row = list(thicknesses) + list(spectrum)
         data_rows.append(row)
     
@@ -420,7 +417,6 @@ for i in range(1000):
 정답 두께: [34.3 67.7 64.5 31.4 30.7 43.5 62. 58.4] 
 예측 두께: [49.1 53.7 69.9 57.6 70. 70. 43.8 70. ]
 실제 Loss값은 0.274704 으로 더이상 유의미하게 줄어들지 않지만 그래프가 전혀 정답에 근접하지 않는걸 볼 수 있습니다.
-/assets/img/inverse_design_images/errer_adjoint.png
 
 ### 3) 해결책: 동시실행
 위와 같이 로컬 미니멈 문제를 해결하기 위해 무작위 x 지점을 여러가지로 시작 하였습니다.
@@ -506,6 +502,7 @@ Adjoint method의 문제점은 시작 지점이 완전한 랜덤이기 때문에
 단순히 AI 모델을 만들어서 로컬 환경에서만 돌리기보다는 실제 웹사이트상에 올려 구동 가능한 모습을 보이는게 좋겠다 싶어서 온라인상에 올려두었습니다.
 아래는 URL과 QR코드 입니다.
 https://viewinversedesignproject-lv8ns7c3pdqwjbeggga7mu.streamlit.app/
+
 ![QR](/assets/img/inverse_design_images/QR_code.png)
 
 사이트에 들어가면 아래와 같은 창이 나옵니다.
@@ -548,7 +545,7 @@ comsol로 만드는 데이터도 너무 시간이 오래걸렸고, AI도 어디�
 그 결과, 실시간(Real-time) 응답 속도와 완벽에 가까운 물리적 정확도라는 두 마리 토끼를 모두 잡을 수 있었습니다.
 
 +본 프로젝트의 전체 PyTorch 소스 코드와 데이터셋 생성 스크립트는 제 깃허브 리포지토리 에서 확인하실 수 있습니다.
-
+https://github.com/pizza119/inverse_design_project_code
 
 ### 마치며...
 이제 AI는 언어모델 같은 단순한 도구로만 사용되는게 아니라, 각자의 영역에서 엄청난 발전을 가져올 수 있는 매우 강력한 무기가 된 것 같습니다.

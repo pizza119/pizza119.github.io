@@ -25,12 +25,12 @@
             "id": "4f0388c503735e9c",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "image",
               "state": {
-                "file": "assets/paper/inverse_design_papers/sciadv.aar4206.pdf"
+                "file": "assets/img/inverse_design_images/1_4round.png"
               },
-              "icon": "lucide-file-text",
-              "title": "sciadv.aar4206"
+              "icon": "lucide-image",
+              "title": "1_4round"
             }
           }
         ]
@@ -195,11 +195,16 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "276622cbc1bc8239",
+  "active": "aabb9cce94f1684d",
   "lastOpenFiles": [
-    "_posts/2025-12-23-test1.md",
+    "assets/img/inverse_design_images/1_4round.png",
     "_posts/2026-02-23-inverse-design-project.md",
+    "assets/img/inverse_design_images/forward_test_1.png",
+    "assets/img/inverse_design_images/comsol_play_first.png",
+    "무제.md",
+    "assets/img/inverse_design_images/forward_model_architecture.png",
     "assets/paper/inverse_design_papers/sciadv.aar4206.pdf",
+    "_posts/2025-12-23-test1.md",
     "assets/paper/inverse_design_papers",
     "assets/paper",
     "start_1.png",
@@ -210,13 +215,9 @@
     "Gemini_Generated_Image_ol4mcaol4mcaol4m.png",
     "assets/img/inverse_design_images/tandem_test.png.md",
     "assets/img/inverse_design_images/tandem_model.png",
-    "assets/video/inverse_design_videos/구슬_생성_위치_무작위_변경.gif",
-    "assets/img/inverse_design_images/start128_adjoint.png",
     "assets/video/inverse_design_images/구슬_생성_위치_무작위_변경.mp4",
     "assets/video/inverse_design_videos",
     "assets/video",
-    "assets/img/inverse_design_images/errer_adjoint.png",
-    "assets/img/inverse_design_images/global_local_mimnimum.png",
     "assets/img/inverse_design_images/웹사이트.md",
     "assets/img/inverse_design_images",
     "assets/img",
