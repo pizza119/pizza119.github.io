@@ -131,7 +131,7 @@ AI 모델을 학습시키기 위해 입력(구조)과 정답(스펙트럼)이 �
 당시에는 당황해서 별 짓을 다했지만, 결론적으로는 exe파일까지 내려가서 자바 힙 메모리 할당을 128GB까지 늘려버렸습니다.
 결론적으로 데이터 확보는 가능하지만 1개 만드는데 30분 정도의 연산시간이 걸리기 시작했습니다.
 
-![초기 comsol 실행|554](/assets/img/inverse_design_images/comsol_play_first.png)
+![초기_comsol실행](/assets/img/inverse_design_images/comsol_play_first.png)
 
 위 사진은 실제로 구현 화면입니다.
 학습용 데이터만 5만개 필요한데 1개에 30분이면 몇년이 걸리는 상황이었습니다.
